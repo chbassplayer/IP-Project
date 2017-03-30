@@ -66,51 +66,6 @@ echo($OrderID);
         </a>
     <div>
 </div>
-<div class="row">
-    <div class="col-xs-12">
-    
-        
-<!-- set up html table to show contents -->
-<table class="table table-hover">
-    <!-- headers for table -->
-    <thead>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Quantity</th>
-        
-    </thead>
-<?php
-    
-    /*
-     * List all the items in the database
-     *
-     */
-    
-    // connect to the database
-    $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
-    
-    // set up a query to get information on the toppings from the database
-    $query = 'SELECT Nam,Price,quantityInOrder from itemsInOrder,items where items.ID=itemsInOrder.itemID;';
-    
-    // run the query
-    $result = queryDB($query, $db);
-    
-    while($row = nextTuple($result)) {
-        echo "\n <tr>";
-        echo "<td>" . $row['Nam'] . "</td>";
-        echo "<td>" . $row['Price'] . "</td>";
-        echo "<td>" . $row['quantityInOrder'] . "</td>";
-       
-    }
-?>   
-
-
-
-    
-</table>
-        
-    </div>
-</div>
 
 
 
