@@ -26,8 +26,8 @@
             <ul class="nav navbar-nav">
 			    <li><a href="Manager_Home.html">Home</a></li>
 			    <li><a href="categories.php">Categories</a></li>
-                <li class="active"><a href="items.php">Items</a></li>
-			    <li><a href="ManageOrders.php">Orders</a></li>
+                <li><a href="items.php">Items</a></li>
+			    <li class = "active"><a href="ManageOrders.php">Orders</a></li>
                 <li><a href="ManageStore.php">Store</a></li>
                 <li><a href="ManageEmployees.php">Employees</a></li>
                 <li><a href="ManageCustomers.php">Customers</a></li>
