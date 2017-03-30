@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 
 ?>
@@ -18,7 +19,8 @@
 </head>
 <body>
     <div class="heading">
-		<h1 style="color:gray">Store Name  <?php echo $_SESSION['email'];?></h1>
+		<h1 style="color:gray">Store Name</h1>
+        <a class="btn btn-default" href="store-logout.php" style="position:absolute; top:0; right:0;">Log Out</a>
 	</div>
 
     <nav class="navbar navbar-default">
