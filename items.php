@@ -18,9 +18,10 @@
     
     <body>
      <div class="heading">
-		<h1 style="color:gray">Store Name <?php echo session_status();?></h1>
+		<h1 style="color:gray">Store Name</h1>
+        <a class="btn btn-default" href="store-logout.php" style="position:absolute; top:0; right:0;">Log Out <b></b></a>
 	</div>
-
+    
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -33,10 +34,12 @@
                 <li><a href="ManageEmployees.php">Employees</a></li>
                 <li><a href="ManageCustomers.php">Customers</a></li>
                 <li><a href="CustomerView.php">Store Front</a></li>
+                
 		    </ul>
             </div>
         </div>
     </nav>
+    
     
 
 
