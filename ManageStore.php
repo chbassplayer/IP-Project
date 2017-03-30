@@ -35,12 +35,31 @@
     
      <body>
 
-<!-- Visible title -->
-        <div class="row">
-            <div class="col-xs-12">
-                <h1>Store Information</h1>
+<body>
+     <div class="heading">
+		<h1 style="color:gray">Store Name</h1>
+        <a class="btn btn-default" href="store-logout.php" style="position:absolute; top:0; right:0;">Log Out <b></b></a>
+	</div>
+    
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+            <ul class="nav navbar-nav">
+			    <li><a href="Manager_Home.html">Home</a></li>
+			    <li><a href="categories.php">Categories</a></li>
+                <li><a href="items.php">Items</a></li>
+			    <li><a href="ManageOrders.php">Orders</a></li>
+                <li class="active"><a href="ManageStore.php">Store</a></li>
+                <li><a href="ManageEmployees.php">Employees</a></li>
+                <li><a href="ManageCustomers.php">Customers</a></li>
+                <li><a href="CustomerView.php">Store Front</a></li>
+                
+		    </ul>
             </div>
         </div>
+    </nav>
+    
+    
         
 <!-- Processing form input -->        
         <div class="row">
