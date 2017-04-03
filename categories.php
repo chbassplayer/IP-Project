@@ -1,8 +1,4 @@
-<?php
-session_start();
 
-
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,7 +44,7 @@ session_start();
         header('Location: store-login.php');
     }
     
-//php to manange submissions-->
+//php to manange submissions of main categories-->
 //do we need to process data-->
 if (isset($_POST['submit'])){
     //then we process
@@ -75,20 +71,53 @@ if (isset($_POST['submit'])){
 }
 
 ?>
+
+<?php
+if (isset($_POST['submitSUB'])){
+    //then we process
+    //get data from the form
+
+    $SUBName = $_POST['SUBName'];
+    $MainCatID=$_POST['categories-id'];
+
+    $isComplete = true;
+    $errorMessage = "";
+
+    if(!$SUBName){
+        $errorMessage .= "Please enter a name for the subcategory .\n";
+        $isComplete= false;
+    }
+
+    if(!$MainCatID){
+        $errorMessage .= "Please enter the Main Category for the subcategory .\n";
+        $isComplete= false;
+
+    }
+
+    
+    if($isComplete){
+    $db=ConnectDB($DBHost, $DBUser,$DBPasswd,$DBName);
+    $query="INSERT INTO SubCats(subName,MainCatID) VALUES('$SUBName',$MainCatID);";
+    $result= queryDB($query,$db);
+    }
+}
+?>
+
+
 <div class="row">
     <div class="col-xs-2">
     </div>
     <div class="col-xs-8" style="background-color:white">
 <h1>Manage Categories</h1>
-    <!-- Showing successfully entering category, if that actually happened -->
+    <!-- Showing successfully entering Main category, if that actually happened -->
     <div class="row">
         <div class="col-xs-12">
         <?php
         if (isset($isComplete) && $isComplete==true) {
             echo '<div class="alert alert-success" role="alert">';
-            echo ("Succesfully entered ". "$catName");
+            echo ("Succesfully entered ". "$catName". "$SUBName");
             echo '</div>';
-            unset($catName);
+            unset($catName,$SUBName);
             }
         ?>            
     </div>
@@ -102,26 +131,62 @@ if (isset($_POST['submit'])){
         echo ($errorMessage);
         echo '</div>';
     }
+?>         
+<?php
+    if (isset($_POST['submitSUB']) && !$isComplete) {
+        echo '<div class="alert alert-danger" role="alert">';
+        echo ($errorMessage);
+        echo '</div>';
+    }
 ?>            
     </div>
 </div>
     
     
-    
+    <!--form for entering Main Category-->
     <div class="row">
     <div class="col-xs-12" style="background-color:white">
         <form action="categories.php" method="post">
 
     <!--category Name-->
     <div class="form-group">
-        <label for="catName">New Category:</label>
+        <label for="catName">New Main Category:</label>
         <input type="text" class="form-control" name="catName" value="<?php if($catName) { echo $catName; } ?>"/>
     </div>
 
     <button type="submit" class="btn btn-default" name="submit">Submit</button>
-    </form>
+        </form>
     </div>
-</div>
+    </div>
+
+    <!--form for entering SUB Category-->
+    <div class="row">
+    <div class="col-xs-12" style="background-color:white">
+        <form action="categories.php" method="post">
+
+    <!--category SUBName-->
+    <div class="form-group">
+        <label for="SUBName">New Sub-Category:</label>
+        <input type="text" class="form-control" name="SUBName" value="<?php if($SUBName) { echo $SUBName; } ?>"/>
+    </div>
+
+    <div class="form-inline">
+    <p><b>Main Category</b><p> <label  for "MainCat"></label>
+
+    <?php
+    // connect to the database
+    if (!isset($db)) {
+        $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
+    }
+    echo (generateDropdown2($db, "categories", "catName", "id", $MainCatID));        
+    ?>
+    </div>
+
+    <button type="submit" class="btn btn-default" name="submitSUB">Submit</button>
+        </form>
+    </div>
+    </div>
+
 <!--show contents of car table-->
 <div class = "row">
     <div class="col-xs-12" style="background-color:white">
@@ -129,26 +194,30 @@ if (isset($_POST['submit'])){
     <table class="table table-hover">
         <!--headers in table-->
         <thead>
-            <th>ID</th>
-            <th>Category Name</th>
+            <th>Main Categories</th>
+            <th># of sub Categories</th>
         </thead>
 
         <?php
 $db=ConnectDB($DBHost, $DBUser,$DBPasswd,$DBName);
 
 //then I set up a query
-$query="SELECT * from categories;";
+$query="SELECT categories.id,catName,count(catName) from SubCats join categories on SubCats.MainCatID=categories.id group by catName order by count(catName);";
 
 //run the query
 $result=queryDB($query,$db);
 
 //show it
 while($row =nextTuple($result)){
+    $GETID=$row['id'];// this is the main id the subcategories are linked to
     echo "\n <tr>";
-    echo "<td>" . $row['id'] . "</td>"; 
-    echo "<td>" . $row['catName'] . "</td>";
+    echo "<td>" . $row['catName'] . "</td>"; 
+    echo "<td><a href='showSubCats.php?id=$GETID'> " . $row['count(catName)'] . "</a></td>";//this needs to lead to a link showing sub cats based on id of Maincat
 
     echo "</tr> \n "; //must close the table row object
+
+
+
 }
 ?>
 
