@@ -1,3 +1,12 @@
+<?php
+    session_start();
+
+    if($_SESSION['email']==null){
+        header('Location: store-login.php');
+    }
+    
+    
+?>
 <html>
        <head>
 <!-- Bootstrap links -->
