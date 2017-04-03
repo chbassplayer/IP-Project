@@ -69,7 +69,7 @@
     </div>
 </div>
 
-<!--FORM FOR ENTERING-->
+<!--FORM FOR ENTERING Main Categories-->
     <div class="row">
         <div class="col-xs-12">
         <form action="manage-categories.php" method="post">
@@ -85,6 +85,24 @@
         </form>
         </div>
     </div>
+
+    <!--FORM FOR ENTERING SUB Categories-->
+    <div class="row">
+        <div class="col-xs-12">
+        <form action="manage-categories.php" method="post">
+        <!--Name-->
+        <div class="form-group">
+            <label for="SubName">New Sub-Category:</label>
+            <input type="text" class="form-control" name="SubName"/>
+        </div>
+        
+        <!--now we need to be able to submit the information-->
+        <button type="submit" class="btn btn-default" name="Subsubmit">Save</button>
+
+        </form>
+        </div>
+    </div>
+
     
 
 <!--here is html for table stuff-->
