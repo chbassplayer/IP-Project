@@ -11,7 +11,12 @@
         header('Location:store-login.php');
         exit;
     }
+    if($_SESSION['AccessOrders']==1){
+        header("Location: UpdateOrder.php?id=".$_GET['id']);
+        exit;
+    }
     
+  
     ?>
 
 
@@ -46,11 +51,8 @@
             <div class="col-xs-12">
 <?php
 $orderiD=($_GET['id']);
-if ($_SESSION['AccessOrders']=null){
-        header("Location: canYouChangeOrders.php?id=$orderiD");
-        exit;
 
-    }
+
 
 
 // Code to handle input from form
