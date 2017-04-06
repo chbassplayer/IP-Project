@@ -6,6 +6,9 @@
     if($_SESSION['email']==null){
         header('Location: store-login.php');
     }
+    $_SESSION['AccessOrders']=1;
+
+    
     
     
 ?>
