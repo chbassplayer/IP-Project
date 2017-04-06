@@ -20,6 +20,18 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>        
 <body>
+    <h1><?php 
+        include_once('config.php');
+        include_once('dbutils.php');
+        $CatID=$_GET['id'];
+        $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
+        $query="SELECT catName from SubCats join categories on categories.id=SubCats.MainCatID  where MainCatID=$CatID;";
+        $result=queryDB($query,$db);
+        while($row = nextTuple($result)) {
+            $CatName=$row['catName'];
+        }
+
+        echo $CatName; ?></h1>
 
    
     <!-- set up html table to show contents -->
@@ -30,16 +42,18 @@
     </thead>
 
 <?php
-    include_once('config.php');
-    include_once('dbutils.php');
     $CatID=$_GET['id'];
     $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
-    $query="SELECT * from SubCats where MainCatID=$CatID;";
+    $query="SELECT SubCats.id as SubID,subName,catName from SubCats join categories on categories.id=SubCats.MainCatID  where MainCatID=$CatID;";
     $result=queryDB($query,$db);
     while($row = nextTuple($result)) {
         $subName=$row['subName'];
+        $CatName=$row['catName'];
+        $subID=$row['SubID'];
         echo "\n <tr>";
         echo "<td>" . $subName . "</td>";
+        echo "<td><a  href='ChangeSubCats.php?SCid=$subID'>" ."Update". "</a> </td>";
+
         echo "\n <tr>";
        
 
