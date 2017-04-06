@@ -6,7 +6,7 @@
     if($_SESSION['email']==null){
         header('Location: store-login.php');
     }
-    $_SESSION['AccessOrders']=1;
+    $_SESSION['AccessOrders']=1;//this makes it so you can see orders the rest of the time :)
 
     
     
