@@ -97,10 +97,10 @@ $result = queryDB($query1, $db);
     while($row = nextTuple($result)) {
         $orderID=$row['id'];
         echo "\n <tr>";
-        echo "<td><a  href='exampleOrder.php?id=$orderID'>" . $orderID . "</a> </td>";
+        echo "<td><a  href='exampleOrder.php?id=$orderID'>" . $orderID . $_SESSION['AccessOrders']. "</a> </td>";
         echo "<td>" . $row['preferredDate'] . "</td>";
         echo "<td>" . $row['description'] . "</td>";
-        echo "<td><a  href='UpdateOrder.php?id=$orderID'>" . "Update". "</a> </td>";
+        echo "<td><a  href='canYouChangeOrders.php?id=$orderID'>" . "Update". "</a> </td>";
         echo "\n <tr>";
         
 
