@@ -27,12 +27,22 @@ session_start();
     <?php
     $SCid=$_GET['SCid'];
     $db=ConnectDB($DBHost, $DBUser,$DBPasswd,$DBName);
-    $queryGetInfo="SELECT * from SubCats where id=$SCid;";
+    $queryGetInfo="SELECT subName,MainCatID, catName from SubCats join categories on 
+    categories.id=SubCats.MainCatID  where SubCats.id=$SCid;";
     $result=queryDB($queryGetInfo,$db);
     while($row =nextTuple($result)){
         $oldName=$row['subName'];
         $oldMain=$row['MainCatID'];
+        $catName=$row['catName'];
     
+    }
+    if(isset($_POST['Back'])){
+        header("Location:showSubCats.php?id=$oldMain");
+        exit;
+    }
+    if(isset($_POST['deleteSUB'])){
+        header("Location:deleteSubCats.php?SCid=$SCid");
+        exit;
     }
     if (isset($_POST['submit'])){
     //then we process
@@ -111,6 +121,13 @@ session_start();
 
     <button type="submit" class="btn btn-default" name="submit">Submit</button>
     <button type="submit" class="btn btn-default" name="deleteSUB">Delete</button>
+    <div class="row"style="padding:4">
+        <div class="col-xs-12">
+        <button type="submit" class="btn btn-default" name="Back">Back to <?php echo $catName;?></button>
+        </div>
+    </div>
+
+    
         </form>
     </div>
     </div>
