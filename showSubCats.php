@@ -32,6 +32,11 @@
         }
 
         echo $CatName; ?></h1>
+        <div class="row">
+            <div class="col-xs-12">
+        <a class="btn btn-default" href="categories.php" style="position:absolute; top:0; right:2%;">Back to Categories</a>
+            </div>
+        </div>
 
    
     <!-- set up html table to show contents -->
