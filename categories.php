@@ -195,7 +195,8 @@ if (isset($_POST['submitSUB'])){
         <!--headers in table-->
         <thead>
             <th>Main Categories</th>
-            <th># of sub Categories</th>
+            <th>Change Main</th>
+            <th>Sub-Categories</th>
         </thead>
 
         <?php
@@ -212,6 +213,7 @@ while($row =nextTuple($result)){
     $GETID=$row['id'];// this is the main id the subcategories are linked to
     echo "\n <tr>";
     echo "<td>" . $row['catName'] . "</td>"; 
+    echo "<td><a href='ChangeCats.php?id=$GETID'>". "Change". "</a></td>";
     echo "<td><a href='showSubCats.php?id=$GETID'> " . $row['count(catName)'] . "</a></td>";//this needs to lead to a link showing sub cats based on id of Maincat
 
     echo "</tr> \n "; //must close the table row object
