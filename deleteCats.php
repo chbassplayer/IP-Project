@@ -43,6 +43,8 @@ session_start();
         $db=ConnectDB($DBHost, $DBUser,$DBPasswd,$DBName);
         $query="DELETE from categories where id=$id;";
         $result= queryDB($query,$db);
+        $query2="DELETE from SubCats where MainCatID=$id;";
+        $result2=queryDB($query2,$db);
         header('Location: categories.php');
 
     }
