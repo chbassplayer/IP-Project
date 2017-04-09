@@ -7,6 +7,7 @@
     include_once('config.php');
     include_once('dbutils.php');
     
+    
 ?>
 
 <html>
@@ -74,13 +75,14 @@ if (isset($_POST['submit'])) {
     }
     
     // get the hashed password from the user with the email that got entered
-    $query = "SELECT hashedpass FROM stores WHERE email='" . $email . "';";
+    $query = "SELECT hashedpass,id FROM stores WHERE email='" . $email . "';";
     $result = queryDB($query, $db);
     if (nTuples($result) > 0) {
         // there is an account that corresponds to the email that the user entered
 		// get the hashed password for that account
 		$row = nextTuple($result);
 		$hashedpass = $row['hashedpass'];
+        $id=$row['id'];
 		
 		// compare entered password to the password on the database
 		if ($hashedpass == crypt($password, $hashedpass)) {
@@ -89,7 +91,8 @@ if (isset($_POST['submit'])) {
 			// start a session
 			if (session_start()) {
 				$_SESSION['email'] = $email;
-				header('Location: Manager_Home.html');
+                $_SESSION['storeID']=$id;
+				header('Location: Manager_Home.php');
 				exit;
 			} else {
 				// if we can't start a session
