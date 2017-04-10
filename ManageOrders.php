@@ -7,8 +7,7 @@
         header('Location: store-login.php');
     }
     
-    
-    
+    $storeID=$_SESSION['storeID'];    
 ?>
 <html>
     <head>
@@ -36,8 +35,15 @@
         <title>Orders</title>
     </head>
     <body>
+    <?php
+    $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
+    $query="SELECT storeName from stores where id=$storeID;";
+    $result = queryDB($query, $db);
+    $row = nextTuple($result);
+    $storeName=$row['storeName'];
+    ?>
      <div class="heading">
-		<h1 style="color:gray">Store Name</h1>
+		<h1 style="color:gray"><?php echo $storeName;?></h1>
         <a class="btn btn-default" href="store-logout.php" style="position:absolute; top:0; right:0;">Log Out <b></b></a>
 	</div>
     
@@ -45,7 +51,7 @@
         <div class="container-fluid">
             <div class="navbar-header">
             <ul class="nav navbar-nav">
-			    <li><a href="Manager_Home.html">Home</a></li>
+			    <li><a href="Manager_Home.php">Home</a></li>
 			    <li><a href="categories.php">Categories</a></li>
                 <li><a href="items.php">Items</a></li>
 			    <li class = "active"><a href="ManageOrders.php">Orders</a></li>
@@ -90,15 +96,15 @@
 
 $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
     
-$query1 = 'SELECT orders.id,description, preferredDate, orderStatus from   orders join orderStatus on 
-orders.orderStatus=orderStatus.id;';
+$query1 = "SELECT orders.id,description, preferredDate, orderStatus from   orders join orderStatus on 
+orders.orderStatus=orderStatus.id where storeID=$storeID order by preferredDate;";
 $result = queryDB($query1, $db);
 
     
     while($row = nextTuple($result)) {
         $orderID=$row['id'];
         echo "\n <tr>";
-        echo "<td><a  href='exampleOrder.php?id=$orderID'>" . $orderID . $_SESSION['AccessOrders']. "</a> </td>";
+        echo "<td><a  href='exampleOrder.php?id=$orderID'>" . $orderID. "</a> </td>";
         echo "<td>" . $row['preferredDate'] . "</td>";
         echo "<td>" . $row['description'] . "</td>";
         echo "<td><a  href='canYouChangeOrders.php?id=$orderID'>" . "Update". "</a> </td>";
