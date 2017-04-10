@@ -223,8 +223,8 @@ while($row =nextTuple($result)){
     $GETID=$row['id'];// this is the main id the subcategories are linked to
     echo "\n <tr>";
     echo "<td>" . $row['catName'] . "</td>"; 
-    echo "<td><a href='ChangeCats.php?id=$GETID&store=$storeID'>". "Change". "</a></td>";
-    echo "<td><a href='showSubCats.php?id=$GETID&store=$storeID'> " . $row['count(catName)'] . "</a></td>";//this needs to lead to a link showing sub cats based on id of Maincat
+    echo "<td><a href='ChangeCats.php?id=$GETID'>". "Change". "</a></td>";
+    echo "<td><a href='showSubCats.php?id=$GETID'> " . $row['count(catName)'] . "</a></td>";//this needs to lead to a link showing sub cats based on id of Maincat
 
     echo "</tr> \n "; //must close the table row object
 
