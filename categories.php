@@ -14,8 +14,24 @@
     <title>Categories</title>
 </head>
 <body>
+    <?php 
+    include_once('config.php');//these are NEEDED TO access and my databases and functions involved
+    include_once('dbutils.php');
+    session_start();
+
+    if($_SESSION['email']==null){
+        header('Location: store-login.php');
+    }
+    //get store Name
+    $storeID=$_SESSION['storeID'];
+    $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
+    $query="SELECT storeName from stores where id=$storeID;";
+    $result = queryDB($query, $db);
+    $row = nextTuple($result);
+    $storeName=$row['storeName'];
+    ?>
     <div class="heading">
-		<h1 style="color:gray">Store Name</h1>
+		<h1 style="color:gray"><?php echo $storeName;?></h1>
         <a class="btn btn-default" href="store-logout.php" style="position:absolute; top:0; right:0;">Log Out</a>
 	</div>
 
@@ -36,13 +52,6 @@
         </div>
     </nav>
     <?php
-include_once('config.php');//these are NEEDED TO access and my databases and functions involved
-include_once('dbutils.php');
-session_start();
-
-    if($_SESSION['email']==null){
-        header('Location: store-login.php');
-    }
     
 //php to manange submissions of main categories-->
 //do we need to process data-->
@@ -62,7 +71,7 @@ if (isset($_POST['submit'])){
     
     if($isComplete){
     $db=ConnectDB($DBHost, $DBUser,$DBPasswd,$DBName);
-    $query="INSERT INTO categories(catName) VALUES('$catName');";
+    $query="INSERT INTO categories(catName,StoreID) VALUES('$catName',$storeID);";
     $result= queryDB($query,$db);
     //I for the living life of me cannot check if these are unique. I have tried and tried and tried....
    
@@ -97,7 +106,7 @@ if (isset($_POST['submitSUB'])){
     
     if($isComplete){
     $db=ConnectDB($DBHost, $DBUser,$DBPasswd,$DBName);
-    $query="INSERT INTO SubCats(subName,MainCatID) VALUES('$SUBName',$MainCatID);";
+    $query="INSERT INTO SubCats(subName,MainCatID,StoreID) VALUES('$SUBName',$MainCatID,$storeID);";
     $result= queryDB($query,$db);
     }
 }
@@ -203,7 +212,8 @@ if (isset($_POST['submitSUB'])){
 $db=ConnectDB($DBHost, $DBUser,$DBPasswd,$DBName);
 
 //then I set up a query
-$query="SELECT categories.id,catName,count(catName) from SubCats join categories on SubCats.MainCatID=categories.id group by catName order by count(catName);";
+$query="SELECT categories.id,catName,count(catName) from SubCats join categories on SubCats.MainCatID=categories.id where
+categories.StoreID=$storeID group by catName order by count(catName);";
 
 //run the query
 $result=queryDB($query,$db);
@@ -213,8 +223,8 @@ while($row =nextTuple($result)){
     $GETID=$row['id'];// this is the main id the subcategories are linked to
     echo "\n <tr>";
     echo "<td>" . $row['catName'] . "</td>"; 
-    echo "<td><a href='ChangeCats.php?id=$GETID'>". "Change". "</a></td>";
-    echo "<td><a href='showSubCats.php?id=$GETID'> " . $row['count(catName)'] . "</a></td>";//this needs to lead to a link showing sub cats based on id of Maincat
+    echo "<td><a href='ChangeCats.php?id=$GETID&store=$storeID'>". "Change". "</a></td>";
+    echo "<td><a href='showSubCats.php?id=$GETID&store=$storeID'> " . $row['count(catName)'] . "</a></td>";//this needs to lead to a link showing sub cats based on id of Maincat
 
     echo "</tr> \n "; //must close the table row object
 
