@@ -7,6 +7,7 @@
         header('Location: store-login.php');
     }
     $_SESSION['AccessOrders']=1;//this makes it so you can see orders the rest of the time :)
+    $storeID=$_SESSION['storeID'];
 
     
     
@@ -112,7 +113,6 @@ if (isset($_POST['submit'])) {
     $newTime1=$_POST['DeliveryTime-id'];
     $newTime2=$_POST['DeliveryTime2-id'];
     $newOrderStatus=$_POST['orderStatus-id'];
-    echo "hello".$newTime2;
 	
     
    // connect to the database
@@ -136,7 +136,7 @@ if (isset($_POST['submit'])) {
     
 		// check if there's a user with the same email
 		$query = "UPDATE orders set deliveryAddress='$newAddress', deliveryState=$newState,deliveryZIP=
-        $newZIP,preferredTime1=$newTime1,preferredTime2=$newTime2, orderStatus=$newOrderStatus where id=$orderID;";
+        $newZIP,preferredTime1=$newTime1,preferredTime2=$newTime2, orderStatus=$newOrderStatus where id=$orderID and storeID=$storeID;";
 		$result = queryDB($query, $db);
         header("Location: ManageOrders.php");
         exit;
