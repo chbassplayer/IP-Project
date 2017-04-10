@@ -272,6 +272,40 @@ function makeStringSafe($db, $mystring) {
     return $dropdownHTML;
     
   }       
-  
+    //this one orders things differently and does conditions
+  function generateDropdown3($db, $table, $uiVariable, $indexVariable, $defaultValue="",$condition) {
+   
+    // set up a query to get the two variables from the table 
+    $query = "SELECT $uiVariable, $indexVariable FROM $table where $condition;";//here storeid==...
+    
+    // run the query
+    $result = queryDB($query, $db);
+    
+    // put together html for the checkbox
+    $dropdownHTML = "<select class='form-control' name='$table-$indexVariable'>\n";
+    
+    while($row = nextTuple($result)) {
+      // get the values for the ui and index variables
+      $ui = $row["$uiVariable"];
+      $index = $row["$indexVariable"];
+      
+      // check if the current value should be the default value
+      if ($index == $defaultValue) {
+        $selected = "selected='selected'";
+      } else {
+        $selected = "";
+      }
+
+      // for each record in the table
+      $dropdownHTML .= "<option value='$index' $selected>$ui</option>\n";
+    }
+    
+    // close select tag
+    $dropdownHTML .="</select>";
+    
+    // return the html for the checkboxes
+    return $dropdownHTML;
+    
+  } 
 
 ?>
