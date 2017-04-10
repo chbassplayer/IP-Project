@@ -21,9 +21,18 @@
         header('Location: store-login.php');
     }
     ?>
+    <?php 
+    //get store Name
+    $storeID=$_SESSION['storeID'];
+    $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
+    $query="SELECT storeName from stores where id=$storeID;";
+    $result = queryDB($query, $db);
+    $row = nextTuple($result);
+    $storeName=$row['storeName'];
+    ?>
     
      <div class="heading">
-		<h1 style="color:gray"><?php echo $_SESSION['email'];?></h1>
+		<h1 style="color:gray"><?php echo $storeName;?></h1>
         <a class="btn btn-default" href="store-logout.php" style="position:absolute; top:0; right:0;">Log Out <b></b></a>
 	</div>
 
@@ -31,7 +40,7 @@
         <div class="container-fluid">
             <div class="navbar-header">
             <ul class="nav navbar-nav">
-			    <li class="active"><a href="Manager_Home.html">Home</a></li>
+			    <li class="active"><a href="Manager_Home.php">Home</a></li>
 			    <li><a href="categories.php">Categories</a></li>
                 <li><a href="items.php">Items</a></li>
 			    <li><a href="ManageOrders.php">Orders</a></li>
