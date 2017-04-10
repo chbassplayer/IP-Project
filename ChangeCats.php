@@ -22,12 +22,13 @@ session_start();
     if($_SESSION['email']==null){
         header('Location: store-login.php');
     }
+    $storeID=$_SESSION['storeID'];
     ?>
 
     <?php
     $id=$_GET['id'];
     $db=ConnectDB($DBHost, $DBUser,$DBPasswd,$DBName);
-    $queryGetInfo="SELECT catName from categories where id=$id;";
+    $queryGetInfo="SELECT catName from categories where id=$id and StoreID=$storeID;";
     $result=queryDB($queryGetInfo,$db);
     while($row =nextTuple($result)){
         $catName=$row['catName'];
@@ -57,7 +58,7 @@ session_start();
     
     if($isComplete){
     $db=ConnectDB($DBHost, $DBUser,$DBPasswd,$DBName);
-    $query="UPDATE categories set catName='$newName' where id=$id;";
+    $query="UPDATE categories set catName='$newName' where id=$id and StoreID=$storeID;";
     $result= queryDB($query,$db);
     //I for the living life of me cannot check if these are unique. I have tried and tried and tried....
    
