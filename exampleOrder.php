@@ -11,6 +11,11 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>        
 <body>
+    <div class="row" style="padding:1%;">
+        <div class="col-xs-12">
+        <a class="btn btn-default" href="ManageOrders.php" style="position:absolute; top:5%;left:2%;">Back To Orders <b></b></a>
+        </div>
+	</div>
 
     <!--lets make a box  to put the order info in-->
     <!--and get all the information for the order page-->
