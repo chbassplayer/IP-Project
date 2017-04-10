@@ -23,12 +23,13 @@ session_start();
     if($_SESSION['email']==null){
         header('Location: store-login.php');
     }
+    $storeID=$_SESSION['storeID'];
     ?>
 
     <?php
     $id=$_GET['id'];
     $db=ConnectDB($DBHost, $DBUser,$DBPasswd,$DBName);
-    $query1="SELECT catName from categories where id=$id;";
+    $query1="SELECT catName from categories where id=$id and StoreID=$storeID;";
     $result1=queryDB($query1,$db);
     while($row =nextTuple($result1)){
         $catName=$row['catName'];
@@ -41,9 +42,9 @@ session_start();
     
     if(isset($_POST['Yes'])){
         $db=ConnectDB($DBHost, $DBUser,$DBPasswd,$DBName);
-        $query="DELETE from categories where id=$id;";
+        $query="DELETE from categories where id=$id and StoreID=$storeID;";
         $result= queryDB($query,$db);
-        $query2="DELETE from SubCats where MainCatID=$id;";
+        $query2="DELETE from SubCats where MainCatID=$id and StoreID=$storeID;";
         $result2=queryDB($query2,$db);
         header('Location: categories.php');
 
