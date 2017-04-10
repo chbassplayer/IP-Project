@@ -187,7 +187,7 @@ if (isset($_POST['submitSUB'])){
     if (!isset($db)) {
         $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
     }
-    echo (generateDropdown2($db, "categories", "catName", "id", $MainCatID));        
+    echo (generateDropdown3($db, "categories", "catName", "id", $MainCatID,"StoreID=$storeID"));        
     ?>
     </div>
 
