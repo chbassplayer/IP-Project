@@ -23,9 +23,11 @@
     <h1><?php 
         include_once('config.php');
         include_once('dbutils.php');
+        $storeID=$_SESSION['storeID'];
         $CatID=$_GET['id'];
         $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
-        $query="SELECT catName from SubCats join categories on categories.id=SubCats.MainCatID  where MainCatID=$CatID;";
+        $query="SELECT catName from SubCats join categories on categories.id=SubCats.MainCatID  where MainCatID=$CatID
+        and categories.StoreID=$storeID;";
         $result=queryDB($query,$db);
         while($row = nextTuple($result)) {
             $CatName=$row['catName'];
@@ -49,7 +51,8 @@
 <?php
     $CatID=$_GET['id'];
     $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
-    $query="SELECT SubCats.id as SubID,subName,catName from SubCats join categories on categories.id=SubCats.MainCatID  where MainCatID=$CatID;";
+    $query="SELECT SubCats.id as SubID,subName,catName from SubCats join categories on categories.id=SubCats.MainCatID
+    where MainCatID=$CatID and categories.StoreID=$storeID;";
     $result=queryDB($query,$db);
     while($row = nextTuple($result)) {
         $subName=$row['subName'];
