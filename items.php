@@ -17,8 +17,24 @@
     </head>
     
     <body>
+    <?php
+    include_once('config.php');
+    include_once('dbutils.php');
+    session_start();
+
+    if($_SESSION['email']==null){
+        header('Location: store-login.php');
+    }
+    //get store Name
+    $storeID=$_SESSION['storeID'];
+    $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
+    $query="SELECT storeName from stores where id=$storeID;";
+    $result = queryDB($query, $db);
+    $row = nextTuple($result);
+    $storeName=$row['storeName'];
+    ?>
      <div class="heading">
-		<h1 style="color:gray">Store Name</h1>
+		<h1 style="color:gray"><?php echo $storeName;?></h1>
         <a class="btn btn-default" href="store-logout.php" style="position:absolute; top:0; right:0;">Log Out <b></b></a>
 	</div>
     
@@ -26,7 +42,7 @@
         <div class="container-fluid">
             <div class="navbar-header">
             <ul class="nav navbar-nav">
-			    <li><a href="Manager_Home.html">Home</a></li>
+			    <li><a href="Manager_Home.php">Home</a></li>
 			    <li><a href="categories.php">Categories</a></li>
                 <li class="active"><a href="items.php">Items</a></li>
 			    <li><a href="ManageOrders.php">Orders</a></li>
@@ -47,13 +63,7 @@
 // check if form data needs to be processed
 
 // include config and utils files
-include_once('config.php');
-include_once('dbutils.php');
-session_start();
 
-    if($_SESSION['email']==null){
-        header('Location: store-login.php');
-    }
     
 
 if (isset($_POST['submit'])) {
@@ -62,9 +72,10 @@ if (isset($_POST['submit'])) {
 
     // get data from form
     $Nam = $_POST['Nam'];
-    $Categor= $_POST['categories-id'];
+    $Categor= $_POST['SubCats-id'];
     $Brand = $_POST['Brand'];
     $ByWeight = $_POST['ByWeight'];
+    $KindOfWeight=$_POST['KindOfWeight-ID'];
     $Price = $_POST['Price'];
     $KeepCold = $_POST['KeepCold'];
     $KeepFrozen = $_POST['KeepFrozen'];
@@ -101,7 +112,7 @@ if (isset($_POST['submit'])) {
         }
         
         // set up query to check if the name is already used
-        $query = "SELECT Nam FROM items WHERE Nam='$Nam';";
+        $query = "SELECT Nam FROM items WHERE Nam='$Nam' and StoreID=$storeID;";
         
         // run the query
         $result = queryDB($query, $db);
@@ -117,8 +128,8 @@ if (isset($_POST['submit'])) {
     if($isComplete) {
     
         // put together SQL statement to insert new record
-        $query = "INSERT INTO items (Categor, Nam, Brand, ByWeight, Price, KeepCold, KeepFrozen, Perishable, AgeRestrict, AgeCanBuy, Stock)
-        VALUES ('$Categor', '$Nam', '$Brand', $ByWeight , $Price, $KeepCold, $KeepFrozen, $Perishable, $AgeRestrict, $AgeCanBuy,$Stock);";
+        $query = "INSERT INTO items (StoreID,Categor, Nam, Brand, ByWeight,KindOfWeight, Price, KeepCold, KeepFrozen, Perishable, AgeRestrict, AgeCanBuy, Stock)
+        VALUES ($storeID,'$Categor', '$Nam', '$Brand', $ByWeight ,$KindOfWeight, $Price, $KeepCold, $KeepFrozen, $Perishable, $AgeRestrict, $AgeCanBuy,$Stock);";
 
         // run the insert statement
         $result = queryDB($query, $db);
@@ -127,7 +138,7 @@ if (isset($_POST['submit'])) {
         echo ("Successfully entered new Item: " . $Nam);
         
         // reset variables so we can reset the form since we've successfully added a record
-        unset($isComplete, $errorMessage, $Nam, $Categor, $Brand, $ByWeight, $Price, $KeepCold, $KeepFrozen, $Perishable, $AgeCanBuy, $Stock);
+        unset($isComplete, $errorMessage, $Nam, $Categor, $Brand,$KindOfWeight, $ByWeight, $Price, $KeepCold, $KeepFrozen, $Perishable, $AgeCanBuy, $Stock);
     }
 }
 
@@ -186,6 +197,18 @@ if (isset($_POST['submit'])) {
         <input type="radio" name="ByWeight" value="0" <?php if(!$ByWeight || !isset($ByWeight)) { echo 'checked'; } ?>> No
     </label>    
 </div>
+<!--Kind of Weight-->
+  <div class="form-inline">
+    <p><b>Kind Of Weight</b><p> <label  for "KindOfWeight"></label>
+
+    <?php
+    // connect to the database
+    if (!isset($db)) {
+        $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
+    }
+    echo (generateDropdown2($db, "KindOfWeight", "Description", "ID", 5));        
+    ?>
+    </div>
 
 <!--KeepCold-->
 <div class="form-group">
@@ -232,13 +255,17 @@ if (isset($_POST['submit'])) {
 </div>
 
 <!-- Category -->
+<div class="form-inline">
+    <p><b>Category</b><p> <label  for "Categor"></label>
+    
 <?php
     // connect to the database
     if (!isset($db)) {
         $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
     }
-    echo (generateDropdown($db, "categories", "catName", "id", $Categor));
+    echo (generateDropdown3($db, "SubCats", "subName", "id", $Categor,"StoreID=$storeID"));
 ?>
+</div>
 
 <!-- Price -->
 <div class="form-group">
@@ -268,7 +295,7 @@ if (isset($_POST['submit'])) {
 </div>
 
 <!-- show contents of toppings table -->
-<div class="row">
+<div class="row" style ="padding:5%">
     <div class="col-xs-12">
     
         
@@ -276,16 +303,10 @@ if (isset($_POST['submit'])) {
 <table class="table table-hover">
     <!-- headers for table -->
     <thead>
-        <th>Category</th>
         <th>Brand</th>
         <th>Name</th>
-        <th>ByWeight</th>
+        <th>Type of Weight</th>
         <th>Price</th>
-        <th>KeepCold</th>
-        <th>KeepFrozen</th>
-        <th>Perishable</th>
-        <th>AgeRestrict</th>
-        <th>AgeCanBuy</th>
         <th>Stock</th>
     </thead>
 <?php
@@ -298,29 +319,24 @@ if (isset($_POST['submit'])) {
     $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
     
     // set up a query to get information on the toppings from the database
-    $query = 'SELECT * FROM items ORDER BY Nam;';
+    $query = "SELECT items.ID as theID,Brand,Nam,Description,Price,Stock FROM items left join KindOfWeight on
+    items.KindOfWeight=KindOfWeight.ID where StoreID=$storeID ORDER BY Nam;";
     
     // run the query
     $result = queryDB($query, $db);
     
     while($row = nextTuple($result)) {
+        $itemID=$row['theID'];
         echo "\n <tr>";
-        echo "<td>" . $row['Categor'] . "</td>";
         echo "<td>" . $row['Brand'] . "</td>";
-        echo "<td>" . $row['Nam'] . "</td>";
-        echo "<td>" . printBoolean($row['ByWeight']) . "</td>";
-        echo "<td>" . $row['Price'] . "</td>";
-        echo "<td>" . printBoolean($row['KeepCold']) . "</td>";
-        echo "<td>" . printBoolean($row['KeepFrozen']) . "</td>";
-        echo "<td>" . printBoolean($row['Perishable']) . "</td>";
-        echo "<td>" . printBoolean($row['AgeRestrict']) . "</td>";
-
-        $AgeCanBuy= $row['AgeCanBuy'];
-        if($row['AgeCanBuy']==0){
-            $AgeCanBuy="N/A";
-
+        echo "<td><a href='showItemDetail.php?id=$itemID'>" . $row['Nam'] . "</td>";
+        $Description= $row['Description'];
+        if($row['Description']==""){
+            $Description="N/A";
         }
-        echo "<td>" . $AgeCanBuy . "</td>";
+
+        echo "<td>" . $Description. "</td>";
+        echo "<td>" . $row['Price'] . "</td>";
         echo "<td>" . $row['Stock'] . "</td>";
         echo "</tr> \n";
     }
