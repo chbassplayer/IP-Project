@@ -1,85 +1,120 @@
-<!doctype html>
 
-<html lang="en">
-<head>
+
+
+<html>
+    <head>
+
+<title>Categories</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        
+    </head>
     
-    <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+     <body>
+<?php 
+    include_once('config.php');//these are NEEDED TO access and my databases and functions involved
+    include_once('dbutils.php');
+    //session_start();
+?>
 
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-<link href="css/bootstrap.css" rel="stylesheet">
-    
-    <title>Customer Categories</title>
-    
-
-</head>
-<body>
+<div class="heading">
+		<h1 style="color:gray">Store Name</h1>
+	</div>
 	
     
-    <div class="heading">
-		<h1 style="color:gray">Store Name</h1>
-		
-	</div>
+			<nav class="navbar navbar-inverse">
+                 <div class="container-fluid">
+                   <div class="navbar-header">
+                     <a class="navbar-brand" href="customerHome.php">Store Name</a>
+                   </div>
+                   
+                   <ul class="nav navbar-nav">
+                     
+                     <li class="active"><a href="customerCategories.php">Categories</a></li>
+                                                
+                   </ul>
+                     
+                     
+               
+                   
+                   
+                   <ul class="nav navbar-nav navbar-right">
+                        <li><a href="login-customer.php">Login <span class="glyphicon glyphicon-user"></span></a></li>
+                        <li><a href="customerCart.php">Cart <span class="glyphicon glyphicon-shopping-cart"></span></a></li>
+                        <li><a href="customerSettings.php">Settings <span class="glyphicon glyphicon-cog"></span></a></li>
+                        <li><a href="customerHelp.php">Help <span class="glyphicon glyphicon-question-sign"></span></a></li>
+                   </ul>
 
-		<nav class="navbar navbar-default">
-				<div class="container-fluid">
-				  <!-- Brand and toggle get grouped for better mobile display -->
-				  <div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-					  <span class="sr-only">Toggle navigation</span>
-					  <span class="icon-bar"></span>
-					  <span class="icon-bar"></span>
-					  <span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="customerHome.html">Home</a>
-				  </div>
-			  
-				  <!-- Collect the nav links, forms, and other content for toggling -->
-				  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					<ul class="nav navbar-nav">
-					  
-					  <li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Categories <span class="caret"></span></a>
-						<ul class="dropdown-menu">
-						  <li><a href="#">Action</a></li>
-						  <li><a href="#">Another action</a></li>
-						  <li><a href="#">Something else here</a></li>
-						  <li role="separator" class="divider"></li>
-						  <li><a href="#">Separated link</a></li>
-						  <li role="separator" class="divider"></li>
-						  <li><a href="#">One more separated link</a></li>
-						</ul>
-					  </li>
-					</ul>
-					<form class="navbar-form navbar-left">
-					  <div class="form-group">
-						<input type="text" class="form-control" placeholder="Search Products">
-					  </div>
-					  <button type="submit" class="btn btn-default">Search</button>
-					</form>
-					<ul class="nav navbar-nav navbar-right">
-					  <li><a href="login-customer.php">Login <span class="glyphicon glyphicon-user"></span></a></li>
-					  <li><a href="#">Cart <span class="glyphicon glyphicon-shopping-cart"></span></a></li>
-					  <li><a href="#">Settings <span class="glyphicon glyphicon-cog"></span></a></li>
-					  <li><a href="#">Help <span class="glyphicon glyphicon-question-sign"></span></a></li>
-					</ul>
-				  </div><!-- /.navbar-collapse -->
-				</div><!-- /.container-fluid -->
-		</nav>
-			
-			
-		    
-            </div>
-        </div>
-    </nav>
+                 
+                 
+                </div>
+
+                 
+            </nav>
+    
 
 
-<script src="js/jquery.js"></script>        
-<script src="js/bootstrap.js"></script>
+	
+<div class = "row">
+    <div class="col-xs-4" style="background-color:white">
+    <!--Set up table-->
+	<div class="panel panel-primary">
+      <div class="panel-heading"><center>Main Categories</center></div>
+	  <div class="panel-body">Select your grocery category below to explore our products.</div>
+      
+    </div>
+    
+
+<?php
+$db=ConnectDB($DBHost, $DBUser,$DBPasswd,$DBName);
+
+//then I set up a query
+$query="SELECT categories.id,catName, count(catName) from SubCats join categories on SubCats.MainCatID=categories.id group by catName order by catName;";
+
+//run the query
+$result=queryDB($query,$db);
+
+//show it
+while($row =nextTuple($result)){
+    $GETID=$row['id'];// this is the main id the subcategories are linked to
+    echo "\n <div class='panel panel-info'>";
+    echo "<div class='panel-heading'><a href='customerViewSubCats.php?id=$GETID'>" . "<center>" . $row['catName'] . "</center>" . "</a></div>"; 
+    //echo "<div class='panel-body'> " . $row['subName'] . "</div>";//this needs to lead to a link showing sub cats based on id of Maincat
+
+    echo "</div> \n "; //must close the table row object
+
+
+
+}
+?>
+
+
+
+
+    
+    </div>
+</div>
+
+</div>
+
+
+
 </body>
+
 </html>
+  
+
+
+
+
+
+
+
+
+        
+
