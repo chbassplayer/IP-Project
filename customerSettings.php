@@ -1,4 +1,4 @@
 <?php
-    include_once('customerHome.html');
+    include_once('customerHome.php');
 ?>
 
