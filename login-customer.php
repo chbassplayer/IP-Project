@@ -3,6 +3,10 @@
 <!-- It uses bootstrap for formatting -->
 
 
+
+
+
+
 <?php
     include_once('config.php');
     include_once('dbutils.php');
@@ -34,6 +38,12 @@
                 <h1>Login</h1>
             </div>
         </div>
+		
+		
+
+
+
+
         
 <!-- Processing form input -->        
         <div class="row">
@@ -89,7 +99,7 @@ if (isset($_POST['submit'])) {
 			// start a session
 			if (session_start()) {
 				$_SESSION['email'] = $email;
-				header('Location: customer-view.php');
+				header('Location: customerHome.php');
 				exit;
 			} else {
 				// if we can't start a session
@@ -101,7 +111,7 @@ if (isset($_POST['submit'])) {
 		}
     } else {
 		// email entered is not in the users table
-		punt("This email is not in our system. <a href='login.-customer.php'>Try again</a>.");
+		punt("This email is not in our system. <a href='login-customer.php'>Try again</a>.");
 	}
 }
 ?>
@@ -125,13 +135,21 @@ if (isset($_POST['submit'])) {
         <input type="password" class="form-control" name="password"/>
     </div>
 
-    <button type="submit" class="btn btn-default" name="submit">Login</button>
+    <center><button type="submit" class="btn btn-default" name="submit">Login</button></center>
 </form>
-                
+
             </div>
         </div>
             
-</div>        
+</div>
+
+<!--Button to return to login screen -->		
+<div class="row">
+        <div class="col-sm-12">
+        
+        <center><a class="btn btn-default" href="createCustomer.php" role="button">Create Customer Account </a></center>
+        </div>
+    </div>
 
         
     </body>
