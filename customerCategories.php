@@ -1,10 +1,18 @@
+<?php
+// this kicks users out if they are not logged in
+    session_start();
+    if (!isset($_SESSION['email'])) {
+        header('Location: login-customer.php');
+        exit;
+    }
 
+?>
 
 
 <html>
     <head>
 
-<title>Categories</title>
+<title>Customer Categories</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -44,7 +52,7 @@
                    
                    
                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="login-customer.php">Login <span class="glyphicon glyphicon-user"></span></a></li>
+                        <li><a href="customer-logout.php"><?php echo $_SESSION['email']; ?><span class="glyphicon glyphicon-user"></span></a></li>
                         <li><a href="customerCart.php">Cart <span class="glyphicon glyphicon-shopping-cart"></span></a></li>
                         <li><a href="customerSettings.php">Settings <span class="glyphicon glyphicon-cog"></span></a></li>
                         <li><a href="customerHelp.php">Help <span class="glyphicon glyphicon-question-sign"></span></a></li>
