@@ -122,8 +122,8 @@
     
     while($row = nextTuple($result)) {
         echo "\n <tr>";
-        echo "<td>" . $row['catName'];
-        echo "<td>" . $row['Brand'];
+        echo "<td>" . $row['catName']. "</td>";;
+        echo "<td>" . $row['Brand']. "</td>";;
         echo "<td>" . $row['Nam'] . "</td>";
         echo "<td>" . $row['quantityInOrder'] . "</td>";
         echo "<td>" . $row['Price'] . "</td>";
