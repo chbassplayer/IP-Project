@@ -117,7 +117,7 @@ if (isset($_POST['submit'])) {
     if ($isComplete) {
     
 		// check if there's a user with the same email
-		$query = "SELECT * FROM customersDominic WHERE email='" . $email . "';";
+		$query = "SELECT * FROM customers WHERE email='" . $email . "';";
 		$result = queryDB($query, $db);
 		if (nTuples($result) == 0) {
 			// if we're here it means there's already a user with the same email
@@ -126,7 +126,7 @@ if (isset($_POST['submit'])) {
 			$hashedpass = crypt($password, getSalt());
 			
 			// put together sql code to insert tuple or record
-			$insert = "INSERT INTO customersDominic(email, hashedpass, fname, lname, address, stateID, zip) VALUES ('" . $email . "', '" . $hashedpass . "', '" . $firstName . "', '" . $lastName . "','" . $custAddress . "','" . $stateID . "', '" . $custZip . "');";
+			$insert = "INSERT INTO customers(email, hashedpass, fname, lname, address, stateID, zip) VALUES ('" . $email . "', '" . $hashedpass . "', '" . $firstName . "', '" . $lastName . "','" . $custAddress . "','" . $stateID . "', '" . $custZip . "');";
 		
 			// run the insert statement
 			$result = queryDB($insert, $db);
