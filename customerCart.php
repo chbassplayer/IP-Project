@@ -6,6 +6,17 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+}
+</style>
 </head>
 <body>
     <?php
@@ -14,59 +25,62 @@
     session_start();
     $storeID=$_SESSION['StoreID'];
     ?>
-		<nav class="navbar navbar-default">
-				<div class="container-fluid">
-				  <!-- Brand and toggle get grouped for better mobile display -->
-				  <div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-					  <span class="sr-only">Toggle navigation</span>
-					  <span class="icon-bar"></span>
-					  <span class="icon-bar"></span>
-					  <span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="draftHomeCustomer.php">Home</a>
-                    <a class="btn btn-default" href="draftCustomerLogout.php" style="position:absolute; top:0; right:0;">Log Out <b></b></a>
-				  </div>
-			  
-				  <!-- Collect the nav links, forms, and other content for toggling -->
-				  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					<ul class="nav navbar-nav">
+		<nav class="navbar navbar-inverse">
+                 <div class="container-fluid">
+                   <div class="navbar-header">
+                     <a class="navbar-brand" href="customerHome.php">Store Name</a>
+                   </div>
+				   
+				<ul class="nav navbar-nav">
+                                                            
+  <div class="dropdown" style="padding-top:8%">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Categories
+    <span class="caret"></span></button>
+    <ul class='dropdown-menu'>;
+       <?php    
+    include_once('config.php');
+    include_once('dbutils.php');
+    $storeID=1;
+    $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
+    $query="SELECT * from categories where StoreID=$storeID;";
+    $result = queryDB($query, $db);
+    while($row = nextTuple($result)) {
+        $categoryID=$row['id'];
+        $catName=$row['catName'];
+            echo "<li class='dropdown-submenu'>";
+                echo "<a class='test' tabindex='-1' href='#'>$catName<span class='caret'></span></a>";
+                echo "<ul class ='dropdown-menu'>";
+                $query1="SELECT subName from SubCats where StoreID=$storeID and MainCatID=$categoryID;";
+                $result1 = queryDB($query1, $db);
+                while($row1 = nextTuple($result1)) {
+                $subName=$row1['subName'];
+                
+                    echo"<li><a tabindex='-1' href='#'>$subName</a></li>";
+                }
+                echo"</ul>";
+                echo "</li>";
+    }
+        ?>
+    
+    </ul>
+  </div>
 
-					  <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Categories <span class="caret"></span></a>
-						<ul class="dropdown-menu">
-                            <?php    
-                        $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
-                        $query="SELECT * from categories where StoreID=$storeID;";
-                        $result = queryDB($query, $db);
-                        while($row = nextTuple($result)) {
-                            $categoryID=$row['id'];
-                            $catName=$row['catName'];
-                            echo "<li><a href='ShowCustomerCategory.php?id=$categoryID'>". $row['catName'] . "</a></td>";
-                            
+                </ul>
+                   
+                   <ul class="nav navbar-nav navbar-right">
+                        <li><a href="customer-logout.php"><?php echo $_SESSION['email']; ?><span class="glyphicon glyphicon-user"></span></a></li>
+						<li><a href="customerCart.php">Cart <span class="glyphicon glyphicon-shopping-cart"></span></a></li>
+                        <li><a href="customerSettings.php">Settings <span class="glyphicon glyphicon-cog"></span></a></li>
+                        <li><a href="customerHelp.php">Help <span class="glyphicon glyphicon-question-sign"></span></a></li>
+                   </ul>
+                   <a class="btn btn-default" href="draftCustomerLogout.php" style="position:absolute; top:0; right:0;">Log Out <b></b></a>
 
-        
-                        }
-                        ?>
-					  
-						  
-						</ul>
-					  </li>
-					</ul>
-					<form class="navbar-form navbar-left">
-					  <div class="form-group">
-						<input type="text" class="form-control" placeholder="Search Products">
-					  </div>
-					  <button type="submit" class="btn btn-default">Search</button>
-					</form>
-					<ul class="nav navbar-nav navbar-right">
-					  <li><a href="login-customer.php">Login <span class="glyphicon glyphicon-user"></span></a></li>
-					  <li><a href="customerCart.php">Cart <span class="glyphicon glyphicon-shopping-cart"></span></a></li>
-					  <li><a href="#">Settings <span class="glyphicon glyphicon-cog"></span></a></li>
-					  <li><a href="#">Help <span class="glyphicon glyphicon-question-sign"></span></a></li>
-					</ul>
-				  </div><!-- /.navbar-collapse -->
-				</div><!-- /.container-fluid -->
-		</nav>
+                 
+                 
+                </div>
+
+                 
+            </nav>
   <table class="table table-hover">
     <!-- headers for table -->
     <thead>
@@ -89,6 +103,9 @@
     and orderID=$order;";
     $result = queryDB($query, $db);
     while($row = nextTuple($result)) {
+        if ($row['Nam']=""){
+          echo "nothing in cart";
+        }else{
         $Name=$row['Nam'];
         $Brand=$row['Brand'];
         $quantity=$row['quantityInOrder'];
@@ -100,11 +117,22 @@
         echo "\n <tr>";
             
         }
+        }
 
 
     
     ?>
     </table>
+<script>
+$(document).ready(function(){
+  $('.dropdown-submenu a.test').on("click", function(e){
+    $(this).next('ul').toggle();
+    e.stopPropagation();
+    e.preventDefault();
+  });
+});
+</script>
+
 
 
 </body>
