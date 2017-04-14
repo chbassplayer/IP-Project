@@ -18,6 +18,7 @@ Perishable boolean not null,
 AgeRestrict boolean not null,
 AgeCanBuy int,
 Stock int,
+image varchar(128),
 Primary Key(ID));
 
 create table KindOfWeight(
@@ -34,5 +35,7 @@ Insert into KindOfWeight(Description)Values('--');
 
 Insert into items(StoreID,Categor,Nam,Brand,ByWeight,Price,KeepCold,KeepFrozen,Perishable,AgeRestrict,Stock)
 Values(1,1,'Strawberry Yogurt','Yoplait',false,.77,true,false,true,false,58);
+Insert into items(StoreID,Categor,Nam,Brand,ByWeight,Price,KeepCold,KeepFrozen,Perishable,AgeRestrict,Stock)
+Values(1,1,'Banana Yogurt','Yoplait',false,.77,true,false,true,false,58);
 Insert into items(StoreID,Categor,Nam,Brand,ByWeight,Price,KeepCold,KeepFrozen,Perishable,AgeRestrict,Stock)
 Values(2,1,'Strawberry Yogurt','Yoplait',false,.77,true,false,true,false,58);
