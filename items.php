@@ -121,7 +121,7 @@ if (isset($_POST['submit'])) {
         if (nTuples($result) > 0) {
             // this means the name is already in use and we need to generate an error
             $isComplete = false;
-            $errorMessage .= "The topping $Nam is already in the database.\n";
+            $errorMessage .= "The item $Nam is already in the database.\n";
         }
     }
     // Stop execution and show error if the form is not complete
@@ -133,7 +133,25 @@ if (isset($_POST['submit'])) {
 
         // run the insert statement
         $result = queryDB($query, $db);
-        
+        $itemID=mysqli_insert_id($db);
+        echo $itemID;
+
+
+        //check if there is a picture
+        if($_FILES['picture']['size']>0){
+    
+            //if there is a picture
+            //copy images to directory
+            $tmpName=$_FILES['picture']['tmp_name'];
+            $fileName=$_FILES['picture']['name'];
+            $newFileName=$imageDir . $itemID . $fileName;
+            if(move_uploaded_file($tmpName,$newFileName)){
+                $query="UPDATE items set image='$newFileName' where ID=$itemID;";
+                queryDB($query,$db);
+            }else{
+                echo "error copying image";
+            }
+        }
         // we have successfully entered the data
         echo ("Successfully entered new Item: " . $Nam);
         
@@ -171,7 +189,7 @@ if (isset($_POST['submit'])) {
 <div class="row">
     <div class="col-xs-12">
         
-<form action="items.php" method="post">
+<form action="items.php" method="post" enctype="multipart/form-data">
 
 <!-- name -->
 <div class="form-group">
@@ -284,6 +302,11 @@ if (isset($_POST['submit'])) {
     <label for="Stock">Stock:</label>
     <input type="number" class="form-control" name="Stock" value="<?php if($Stock) { echo $Stock; } ?>"/>
 </div>
+<!--upload picture-->
+<div class="form-group">
+    <label for="picture">Item Image</label>
+    <input type="file" class ="form-control" name="picture"/>
+</div>
 
 <button type="submit" class="btn btn-default" name="submit">Save</button>
 
@@ -308,6 +331,10 @@ if (isset($_POST['submit'])) {
         <th>Type of Weight</th>
         <th>Price</th>
         <th>Stock</th>
+        <th></th>
+        <th></th>
+        <th></th>
+
     </thead>
 <?php
     /*
@@ -319,7 +346,7 @@ if (isset($_POST['submit'])) {
     $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
     
     // set up a query to get information on the toppings from the database
-    $query = "SELECT items.ID as theID,Brand,Nam,Description,Price,Stock FROM items left join KindOfWeight on
+    $query = "SELECT items.ID as theID,Brand,Nam,Description,Price,Stock,image FROM items left join KindOfWeight on
     items.KindOfWeight=KindOfWeight.ID where StoreID=$storeID ORDER BY Nam;";
     
     // run the query
@@ -338,6 +365,14 @@ if (isset($_POST['submit'])) {
         echo "<td>" . $Description. "</td>";
         echo "<td>" . $row['Price'] . "</td>";
         echo "<td>" . $row['Stock'] . "</td>";
+        //picture
+        echo "<td>";
+        if($row['image']){
+            $imageLocation=$row['image'];
+            echo "<img src=$imageLocation width='150'>";
+        }
+
+        echo "</td>";
         echo "</tr> \n";
     }
 ?>   
