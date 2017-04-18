@@ -103,9 +103,7 @@
     and orderID=$order;";
     $result = queryDB($query, $db);
     while($row = nextTuple($result)) {
-        if ($row['Nam']=""){
-          echo "nothing in cart";
-        }else{
+        
         $Name=$row['Nam'];
         $Brand=$row['Brand'];
         $quantity=$row['quantityInOrder'];
@@ -117,7 +115,7 @@
         echo "\n <tr>";
             
         }
-        }
+        
 
 
     
