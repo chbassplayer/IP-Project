@@ -156,6 +156,14 @@
 
         </div>
     <div>
+    <div class="row">
+        <div class= "col-xs-12" style="position:absolute; right:10%;">
+        <a class="btn btn-default" href="login-customer.php" style="position:absolute; top:0; right:12%;">Log In <b></b></a>
+        <a class="btn btn-default" href="checkingOut1.php" style="position:absolute; top:0; right:0;">Check Out as guest <b></b></a>
+        </div>
+    <div>
+
+
 <script>
 $(document).ready(function(){
   $('.dropdown-submenu a.test').on("click", function(e){
