@@ -44,10 +44,10 @@ if (isset($_POST['submit'])) {
         $errorMessage .= " Please enter card number. ";
         $isComplete = false;
     }
-    if(strlen($cardNum !=16)){
+    /*if(strlen($cardNum !=16)){
         $errorMessage .="Card number invalid.  ";
         $isComplete=false;
-    }
+    }*/
     if(!$exp){
         $errorMessage .= " Please enter expiration date. ";
         $isComplete = false;
