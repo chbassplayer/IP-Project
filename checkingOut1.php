@@ -25,6 +25,7 @@
     //echo $_SESSION['startedOrder'];
     $_SESSION['StoreID']=1;
     $storeID=$_SESSION['StoreID'];
+    $order=$_SESSION['startedOrder'];
 
 ?>
 
@@ -161,9 +162,11 @@ if (isset($_POST['submit'])) {
         $result = queryDB($queryDate, $db);
         $row = nextTuple($result);
         $TodayDate=$row['TD'];
-        $query2="INSERT into orders (customerID,deliveryAddress,deliveryState,deliveryZIP,storeID,orderDate)VALUES($customerID,
-        '$address',$stateID,$zip,$storeID,$TodayDate);";
+        $query2="UPDATE orders set customerID=$customerID,
+        deliveryAddress='$address' ,deliveryState= $stateID,deliveryZIP=$zip,storeID=$storeID,orderDate='$TodayDate'
+        where id=$order;";
         $result2=queryDB($query2,$db);
+        $_SESSION['customerID']=$customerID;//will be used for next page
 
         header("Location: checkingOut2.php");
         exit;
