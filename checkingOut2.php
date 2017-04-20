@@ -148,7 +148,7 @@ if (isset($_POST['submit'])) {
 
         <div class="row">
             <div class="col-xs-12">
-                <h1>Payment Information</h1>
+                <h1>Preferences</h1>
                 
             </div>
         </div>
