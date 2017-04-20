@@ -121,6 +121,7 @@
     
     ?>
     </table>
+    <a class="btn btn-default" href="checkingOut0.php">Check Out <b></b></a>
 <script>
 $(document).ready(function(){
   $('.dropdown-submenu a.test').on("click", function(e){
