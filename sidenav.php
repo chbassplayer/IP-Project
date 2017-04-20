@@ -50,7 +50,7 @@
         $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
         
         if ($_SESSION['startedOrder']==null){
-            $queryStart="INSERT into orders (storeID,orderDate)Values(1,$TodayDate);";//starts an order
+            $queryStart="INSERT into orders (storeID,orderDate,orderStatus)Values(1,$TodayDate,6);";//starts an order
             $resultStart=queryDB($queryStart,$db);
             //for now get last order created:
             $queryGETid="SELECT max(id) as lastEntry from orders;";
@@ -108,11 +108,14 @@
         ?>
     
     </ul>
+   
   </div>
+      
 
                 </ul>
-                   
+                
                    <ul class="nav navbar-nav navbar-right">
+                        <li style ="padding-top:2%; padding-bottom:1%"><input type="text" name="search" placeholder="Search.." style="border-radius:5px;"></li> 
                         <li><a href="customer-logout.php"><?php echo $_SESSION['email']; ?><span class="glyphicon glyphicon-user"></span></a></li>
 						<li><a href="customerCart.php">Cart <span class="glyphicon glyphicon-shopping-cart"></span></a></li>
                         <li><a href="customerSettings.php">Settings <span class="glyphicon glyphicon-cog"></span></a></li>
