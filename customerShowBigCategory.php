@@ -165,11 +165,11 @@
     include_once('config.php');
     include_once('dbutils.php');
     //$subCategory=7;
-	$subCategory=$_GET['id'];
+	$Category=$_GET['id'];
 	$storeID=1;
     $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
     //here I want to get the main category even though in items we only store the subcategory
-    $query="SELECT * FROM items join SubCats on items.Categor=SubCats.id WHERE Categor=$subCategory AND items.storeID=$storeID;";
+    $query="SELECT * FROM items join SubCats on items.Categor=SubCats.id WHERE MainCatID=$Category AND items.storeID=$storeID=1;";
 	//$query="SELECT * from items where StoreID=$storeID order by Nam;";
     $result=queryDB($query,$db);
     while($row = nextTuple($result)) {
