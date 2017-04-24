@@ -6,10 +6,6 @@
 <?php
 // this kicks users out if they are not logged in
     session_start();
-    if (!isset($_SESSION['email'])) {
-        header('Location: login-customer.php');
-        exit;
-    }
 
 ?>
 
@@ -48,11 +44,6 @@
     </head>
     
      <body>
-	
-<?php
-    include_once('config.php');
-    include_once('dbutils.php')
-?>
 
 
 <?php
@@ -69,13 +60,7 @@
     $storeID=$_SESSION['StoreID'];
     $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
     //get Date
-    $queryDate="SELECT CURDATE() as TD;";
-    $result = queryDB($queryDate, $db);
-    $row = nextTuple($result);
-    $TodayDate=$row['TD'];
-
-
-		//end of test
+    
     ?>
 
 
@@ -106,7 +91,15 @@
 						<li><a href="customerCart.php">Cart <span class="glyphicon glyphicon-shopping-cart"></span></a></li>
                         <li><a href="customerSettings.php">Settings <span class="glyphicon glyphicon-cog"></span></a></li>
                         <li><a href="customerHelp.php">Help <span class="glyphicon glyphicon-question-sign"></span></a></li>
-						<li><a href="customer-logout.php">Logout: <?php echo $_SESSION['email']; ?><span class="glyphicon glyphicon-user"></span></a></li>
+                        <?php
+                        if($_SESSION['email']==""){
+                            echo "<li><a href='login-customer.php'>Login<span class='glyphicon glyphicon-user'></span></a></li>";
+                        }
+                        else{
+                            echo "<li><a href='customer-logout.php'>Logout:". $_SESSION['email']."<span class='glyphicon glyphicon-user'></span></a></li>";
+                        }
+                        ?>
+						
                    </ul>
 				   
 				   
@@ -165,30 +158,36 @@
     <!--Set up table-->
 <?php
         if(isset($_POST['completedsearch']))
-        {
-                $search = $_POST['query'];
-                $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
-                
-                $query = "SELECT * FROM items WHERE (StoreID=$storeID) and (Nam LIKE '%$search%' OR Brand LIKE '%$search%');"; 
-                $result=queryDB($query,$db);
-
-                
-                
-                while($row = nextTuple($result)) {
+            {
+                    $search = $_POST['query'];
+                    $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
+                    
+                    $query = "SELECT * FROM items WHERE (StoreID=$storeID) and (Nam LIKE '%$search%' OR Brand LIKE '%$search%');"; 
+                    $result=queryDB($query,$db);
+                        while($row = nextTuple($result)) {
+                        $productID=$row['ID'];
                         echo "\n <div class='col-md-3 column productbox'>";
                         if($row['image']){
                             $imageLocation=$row['image'];
                             echo "<img src=$imageLocation class='img-responsive' width='150' height='150'>";
                         }
                         else{
-                        echo "<img src='http://placehold.it/460x250/e67e22/ffffff&text=ITEMS TEST' class='img-responsive' width='150'height='150' >";
+                        echo "<img src='http://placehold.it/460x250/e67e22/ffffff&text=ITEMS TEST' class='img-responsive' width='150' height='150'>";
                             }
-                        echo "<div class='producttitle'><a href='showItems.php?id=$subName'>" . "<center>" . $row['Brand'] . " " . $row['Nam'] . "</center>" . "</a></div>";
-                        echo "<div class='productprice'><div class='pull-right'><a href='#' class='btn btn-success btn-sm' role='button'>Add to cart</a></div><div class='pricetext'>" . "$" . "<strong>" . $row['Price'] . "</strong>" . "</div></div>";
+                        echo "<div class='producttitle'><a href='showItems.php?id=$subName'>" . "<left>" . $row['Brand'] . " " . $row['Nam']  . "</a></div>";
+                        echo "<div class='productprice'><div class='pricetext'>" . "$" . "<strong>" . $row['Price'] . "</strong>" . "</div></div>";
+                        echo "<form action='addToCart.php?id=$productID' method='post'>";
+                        echo "<div class='form-inline'>";
+                        echo "<label for='Quantity'>Quantity:</label>";
+                        echo "<input type='number' class='form-control' name='Quantity' style= width:25% value='<?php if($quantity) { echo $quantity; } ?>'/>";
+                        echo "</div>";
+                        echo "<button type='submit' class='btn btn-default' name='AddToCart'>Add To Cart</button>";
+                        echo "</form>";
+
                         echo "</div> \n ";
-                }
-        }
-?>
+                    }
+            }
+    ?>
 </div>
 
 <?php
@@ -205,24 +204,27 @@
 	//$query="SELECT * from items where StoreID=$storeID order by Nam;";
     $result=queryDB($query,$db);
     while($row = nextTuple($result)) {
-        $subName=$row['id'];
-        
-		echo "\n <div class='col-md-3 column productbox'>";
+        $productID=$row['ID'];
+        echo "\n <div class='col-md-3 column productbox'>";
         if($row['image']){
             $imageLocation=$row['image'];
-            echo "<img src=$imageLocation class='img-responsive' width='150'>";
+            echo "<img src=$imageLocation class='img-responsive' width='150' height='150'>";
         }
         else{
-        echo "<img src='http://placehold.it/460x250/e67e22/ffffff&text=ITEMS TEST' class='img-responsive'>";
+        echo "<img src='http://placehold.it/460x250/e67e22/ffffff&text=ITEMS TEST' class='img-responsive' width='150' height='150'>";
             }
-        echo "<div class='producttitle'>" . "<center>" . $row['Brand'] . " " . $row['Nam'] . "</center>" . "</div>";
-		echo "<div class='productprice'><div class='pull-right'><a href='#' class='btn btn-success btn-sm' role='button'>Add to cart</a></div><div class='pricetext'>" . "$" . "<strong>" . $row['Price'] . "</strong>" . "</div></div>";
-		
-		echo "</div> \n ";
-	 
-	 
-       
-        }
+        echo "<div class='producttitle'><a href='showItems.php?id=$subName'>" . "<left>" . $row['Brand'] . " " . $row['Nam']  . "</a></div>";
+        echo "<div class='productprice'><div class='pricetext'>" . "$" . "<strong>" . $row['Price'] . "</strong>" . "</div></div>";
+        echo "<form action='addToCart.php?id=$productID' method='post'>";
+        echo "<div class='form-inline'>";
+        echo "<label for='Quantity'>Quantity:</label>";
+        echo "<input type='number' class='form-control' name='Quantity' style= width:25% value='<?php if($quantity) { echo $quantity; } ?>'/>";
+        echo "</div>";
+        echo "<button type='submit' class='btn btn-default' name='AddToCart'>Add To Cart</button>";
+        echo "</form>";
+
+        echo "</div> \n ";
+    }
 ?>
 
 <script>
