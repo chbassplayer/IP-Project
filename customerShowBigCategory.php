@@ -88,13 +88,21 @@
 	</div>
 	
     
-            <nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse">
                  <div class="container-fluid">
                    <div class="navbar-header">
-                     <a class="navbar-brand" href="customerHome.php">Store Name</a>
+                     <a class="navbar-brand" href="customerHomeForEdits.php">Store Name</a>
                    </div>
 				   
 				   <ul class="nav navbar-nav navbar-right">
+                   
+                        <li style ="padding-top:2%; padding-bottom:1%">
+                        <form method="post" action="customerItemsViewForEdits.php">
+                            <input type="text" value="Search..." name="query" />
+                            <input type="submit" value="Find" name="completedsearch" />
+                        </form>
+                        </li>
+
 						<li><a href="customerCart.php">Cart <span class="glyphicon glyphicon-shopping-cart"></span></a></li>
                         <li><a href="customerSettings.php">Settings <span class="glyphicon glyphicon-cog"></span></a></li>
                         <li><a href="customerHelp.php">Help <span class="glyphicon glyphicon-question-sign"></span></a></li>
@@ -122,13 +130,14 @@
 				echo "<li class='dropdown-submenu'>";
 					echo "<a class='test' tabindex='-1' href='customerShowBigCategory.php?id=$categoryID'>$catName<span class='caret'></span></a>";
 					echo "<ul class ='dropdown-menu'>";
-					$query1="SELECT subName from SubCats where StoreID=$storeID and MainCatID=$categoryID;";
+					$query1="SELECT id,subName from SubCats where StoreID=$storeID and MainCatID=$categoryID;";
 					$result1 = queryDB($query1, $db);
                     echo  "<li><a tabindex='-1' href='customerShowBigCategory.php?id=$categoryID'>All $catName</a></li>";
 					while($row1 = nextTuple($result1)) {
 					$subName=$row1['subName'];
+                    $subID=$row1['id'];
 								
-						echo"<li><a tabindex='-1' href='customerItemsView.php?id=$subName'>$subName</a></li>";
+						echo"<li><a tabindex='-1' href='customerItemsViewForEdits.php?id=$subID'>$subName</a></li>";
 					
 					}
 					echo"</ul>";
@@ -174,9 +183,14 @@
     $result=queryDB($query,$db);
     while($row = nextTuple($result)) {
         $subName=$row['id'];
-        
 		echo "\n <div class='col-md-3 column productbox'>";
-		echo "<img src='http://placehold.it/460x250/e67e22/ffffff&text=ITEMS TEST' class='img-responsive'>";
+        if($row['image']){
+            $imageLocation=$row['image'];
+            echo "<img src=$imageLocation class='img-responsive' width='150'>";
+        }
+        else{
+        echo "<img src='http://placehold.it/460x250/e67e22/ffffff&text=ITEMS TEST' class='img-responsive' width='150'>";
+            }
         echo "<div class='producttitle'>" . "<center>" . $row['Brand'] . " " . $row['Nam'] . "</center>" . "</div>";
 		echo "<div class='productprice'><div class='pull-right'><a href='#' class='btn btn-success btn-sm' role='button'>Add to cart</a></div><div class='pricetext'>" . "$" . "<strong>" . $row['Price'] . "</strong>" . "</div></div>";
 		
