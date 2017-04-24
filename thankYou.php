@@ -1,7 +1,9 @@
 <?php
     include_once('config.php');
     include_once('dbutils.php');
-    session_unset();
+    session_start();
+    unset ($_SESSION['startedOrder']);
+    unset ($_SESSION['customerID']);
 
 ?>
 
