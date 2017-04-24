@@ -111,9 +111,7 @@
     
     
     // set up a query to get information on the toppings from the database
-    $query = "SELECT catName,Nam,Brand,Price,quantityInOrder from itemsInOrder join items on itemsInOrder.itemID=items.ID 
-    join categories on categories.id=items.Categor
-    where orderID=$orderID";
+    $query = "SELECT catName,Nam,Brand,Price,quantityInOrder from itemsInOrder join items on itemsInOrder.itemID=items.ID join SubCats on SubCats.id=items.Categor join categories on categories.id=SubCats.MainCatID where OrderID=$orderID;";
 
     
     // run the query
