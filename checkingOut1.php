@@ -6,14 +6,14 @@ session_start();
 $_SESSION['StoreID']=1;
 $storeID=$_SESSION['StoreID'];
 $order=$_SESSION['startedOrder'];
-$email=$_SESSION['email'];
+$email=$_SESSION['Cemail'];
 //get original data
 $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);    
     $queryO="SELECT * from customers where email='$email';";
     $resultO = queryDB($queryO, $db);
     while($rowO = nextTuple($resultO)) {
         $custid=$rowO['id'];
-        echo "<p>Hello $custid</p>";
+        //echo "<p>Hello $custid</p>";
         $fnameO=$rowO['fname'];
         $lnameO=$rowO['lname'];
         $addressO=$rowO['address'];
@@ -61,7 +61,7 @@ if (isset($_POST['submit'])) {
 
     if ($isComplete) {
         //first check if logged in//
-        if($_SESSION['email']!=null){
+        if($_SESSION['Cemail']!=null){
         $query2="UPDATE orders set customerID=$custid,
         deliveryAddress='$address' ,deliveryState= $stateID,deliveryZIP=$zip,storeID=$storeID,orderDate='$TodayDate'
         where id=$order;";
@@ -109,6 +109,9 @@ if (isset($_POST['submit'])) {
 </style>
 </head>
 <body>
+<div class="heading">
+		<h1 style="color:gray">Store Name</h1>
+</div>
 
 <nav class="navbar navbar-inverse">
         <div class="container-fluid">
@@ -129,11 +132,11 @@ if (isset($_POST['submit'])) {
             <li><a href="customerSettings.php">Settings <span class="glyphicon glyphicon-cog"></span></a></li>
             <li><a href="customerHelp.php">Help <span class="glyphicon glyphicon-question-sign"></span></a></li>
             <?php
-            if($_SESSION['email']==""){
+            if($_SESSION['Cemail']==""){
                 echo "<li><a href='login-customer.php'>Login<span class='glyphicon glyphicon-user'></span></a></li>";
             }
             else{
-                echo "<li><a href='customer-logout.php'>Logout:". $_SESSION['email']."<span class='glyphicon glyphicon-user'></span></a></li>";
+                echo "<li><a href='customer-logout.php'>Logout:". $_SESSION['Cemail']."<span class='glyphicon glyphicon-user'></span></a></li>";
             }
             ?>
             
@@ -279,9 +282,15 @@ if (isset($_POST['submit'])) {
 
     <button type="submit" class="btn btn-default" name="submit" style="position:absolute; right:10%">Submit</button>
 </form>
+
+
 <div class="row">
     <div class= "col-xs-12" style="position:absolute; right:10%;">
-    <a class="btn btn-default" href="login-customer.php" style="position:absolute; top:0; right:12%;">Log In <b></b></a>
+    <?php
+    if($_SESSION['Cemail']==""){
+    echo "<a class='btn btn-default' href='login-customer.php' style='position:absolute; top:0; right:12%'>Log In <b></b></a>";
+    }
+    ?>
     </div>
 <div>
                 
