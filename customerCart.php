@@ -47,11 +47,11 @@
                         <li><a href="customerSettings.php">Settings <span class="glyphicon glyphicon-cog"></span></a></li>
                         <li><a href="customerHelp.php">Help <span class="glyphicon glyphicon-question-sign"></span></a></li>
                         <?php
-                        if($_SESSION['email']==""){
+                        if($_SESSION['Cemail']==""){
                             echo "<li><a href='login-customer.php'>Login<span class='glyphicon glyphicon-user'></span></a></li>";
                         }
                         else{
-                            echo "<li><a href='customer-logout.php'>Logout:". $_SESSION['email']."<span class='glyphicon glyphicon-user'></span></a></li>";
+                            echo "<li><a href='customer-logout.php'>Logout:". $_SESSION['Cemail']."<span class='glyphicon glyphicon-user'></span></a></li>";
                         }
                         ?>
 						
@@ -197,9 +197,18 @@ $(document).ready(function(){
     <div class="row">
         <div class= "col-xs-12" style="position:absolute; right:5%;">
         <p  style="position:absolute; right:0%;"><b>Total </b><?php echo $Total;?></p>
-        <p><a class="btn btn-default" href="checkingOut0.php" style="position:absolute; right:7%;">Check Out <b></b></a></p>
         </div>
     </div>
+    <?php
+    if($_SESSION['Cemail']==""){
+        echo "<a  class='btn btn-default' href='checkingOut0.php' style='position:absolute; right:12%'>Check Out as Guest</a>";
+        echo "<a  class ='btn btn-default'href='login-customer.php' style='position:absolute; right:25%'>Login</a>";
+        }
+    else{
+        echo "<a  class='btn btn-default' href='checkingOut0.php' style='position:absolute; right:12%'>Check Out</a>";
+    }
+
+    ?>
 
 </body>
 </html>
