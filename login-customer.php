@@ -98,8 +98,8 @@ if (isset($_POST['submit'])) {
 			
 			// start a session
 			if (session_start()) {
-				$_SESSION['email'] = $email;
-				header('Location: customerHome.php');
+				$_SESSION['Cemail'] = $email;
+				header('Location: customerHomeForEdits.php');
 				exit;
 			} else {
 				// if we can't start a session
