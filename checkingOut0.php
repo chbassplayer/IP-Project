@@ -28,6 +28,9 @@
     $order=$_SESSION['startedOrder'];
 
 ?>
+<div class="heading">
+		<h1 style="color:gray">Store Name</h1>
+	</div>
 
 <nav class="navbar navbar-inverse">
         <div class="container-fluid">
@@ -48,11 +51,11 @@
             <li><a href="customerSettings.php">Settings <span class="glyphicon glyphicon-cog"></span></a></li>
             <li><a href="customerHelp.php">Help <span class="glyphicon glyphicon-question-sign"></span></a></li>
             <?php
-            if($_SESSION['email']==""){
+            if($_SESSION['Cemail']==""){
                 echo "<li><a href='login-customer.php'>Login<span class='glyphicon glyphicon-user'></span></a></li>";
             }
             else{
-                echo "<li><a href='customer-logout.php'>Logout:". $_SESSION['email']."<span class='glyphicon glyphicon-user'></span></a></li>";
+                echo "<li><a href='customer-logout.php'>Logout:". $_SESSION['Cemail']."<span class='glyphicon glyphicon-user'></span></a></li>";
             }
             ?>
             
@@ -174,8 +177,16 @@
     </div>
     <div class="row">
         <div class= "col-xs-12" style="position:absolute; right:10%;">
-        <a class="btn btn-default" href="login-customer.php" style="position:absolute; top:0; right:10%;">Log In <b></b></a>
-        <a class="btn btn-default" href="checkingOut1.php" style="position:absolute; top:0; right:15%;">Check Out as guest <b></b></a>
+        <?php
+        if($_SESSION['Cemail']!=""){
+            echo "<a class='btn btn-default' href='checkingOut1.php' style='position:absolute; top:0; right:15%'>Check Out<b></b></a>";
+        }
+        else {
+            echo "<a class='btn btn-default' href='login-customer.php' style='position:absolute; top:0; right:10%'>Log In <b></b></a>";
+            echo "<a class='btn btn-default' href='checkingOut1.php' style='position:absolute; top:0; right:15%;'>Check Out as guest <b></b></a>";
+        
+        }
+        ?>
         </div>
     <div>
 
