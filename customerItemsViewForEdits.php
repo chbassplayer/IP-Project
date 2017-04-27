@@ -4,16 +4,10 @@
 ?>
 
 <?php
-// this kicks users out if they are not logged in
+
     session_start();
 
 ?>
-
-
-
-
-
-
 
 <html>
     <head>
@@ -55,18 +49,13 @@
     include_once('config.php');
     include_once('dbutils.php');
     session_start();
-    echo $_SESSION['startedOrder'];
+    //echo $_SESSION['startedOrder'];
     $_SESSION['StoreID']=1;
     $storeID=$_SESSION['StoreID'];
     $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
     //get Date
     
     ?>
-
-
-
-
-
 
 <div class="heading">
 		<h1 style="color:gray">Store Name</h1>
@@ -92,11 +81,11 @@
                         <li><a href="customerSettings.php">Settings <span class="glyphicon glyphicon-cog"></span></a></li>
                         <li><a href="customerHelp.php">Help <span class="glyphicon glyphicon-question-sign"></span></a></li>
                         <?php
-                        if($_SESSION['email']==""){
+                        if($_SESSION['Cemail']==""){
                             echo "<li><a href='login-customer.php'>Login<span class='glyphicon glyphicon-user'></span></a></li>";
                         }
                         else{
-                            echo "<li><a href='customer-logout.php'>Logout:". $_SESSION['email']."<span class='glyphicon glyphicon-user'></span></a></li>";
+                            echo "<li><a href='customer-logout.php'>Logout:". $_SESSION['Cemail']."<span class='glyphicon glyphicon-user'></span></a></li>";
                         }
                         ?>
 						
@@ -147,11 +136,6 @@
 
                  
             </nav>
-
-
-
-
-
 	
 <div class = "row">
     <div class="col-xs-12" style="background-color:white">
@@ -160,6 +144,7 @@
         if(isset($_POST['completedsearch']))
             {
                     $search = $_POST['query'];
+                    $_SESSION['query']=$search;
                     $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
                     
                     $query = "SELECT * FROM items WHERE (StoreID=$storeID) and (Nam LIKE '%$search%' OR Brand LIKE '%$search%');"; 
@@ -186,9 +171,44 @@
 
                         echo "</div> \n ";
                     }
+                    exit;
             }
     ?>
 </div>
+<?php
+//is there a previous query... yes
+if($_SESSION['query']!=""){
+    //echo "there is something from before";
+    $query=$_SESSION['query'];
+    $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
+    
+    $query = "SELECT * FROM items WHERE (StoreID=$storeID) and (Nam LIKE '%$query%' OR Brand LIKE '%$query%');"; 
+    $result=queryDB($query,$db);
+        while($row = nextTuple($result)) {
+        $productID=$row['ID'];
+        echo "\n <div class='col-md-3 column productbox'>";
+        if($row['image']){
+            $imageLocation=$row['image'];
+            echo "<img src=$imageLocation class='img-responsive' width='150' height='150'>";
+        }
+        else{
+        echo "<img src='http://placehold.it/460x250/e67e22/ffffff&text=ITEMS TEST' class='img-responsive' width='150' height='150'>";
+            }
+        echo "<div class='producttitle'><a href='showItems.php?id=$subName'>" . "<left>" . $row['Brand'] . " " . $row['Nam']  . "</a></div>";
+        echo "<div class='productprice'><div class='pricetext'>" . "$" . "<strong>" . $row['Price'] . "</strong>" . "</div></div>";
+        echo "<form action='addToCart.php?id=$productID' method='post'>";
+        echo "<div class='form-inline'>";
+        echo "<label for='Quantity'>Quantity:</label>";
+        echo "<input type='number' class='form-control' name='Quantity' style= width:25% value='<?php if($quantity) { echo $quantity; } ?>'/>";
+        echo "</div>";
+        echo "<button type='submit' class='btn btn-default' name='AddToCart'>Add To Cart</button>";
+        echo "</form>";
+
+        echo "</div> \n ";
+        }
+}
+unset($_SESSION['query']);
+?>
 
 <?php
     include_once('config.php');
