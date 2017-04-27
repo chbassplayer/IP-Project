@@ -98,11 +98,11 @@
                         <li><a href="customerSettings.php">Settings <span class="glyphicon glyphicon-cog"></span></a></li>
                         <li><a href="customerHelp.php">Help <span class="glyphicon glyphicon-question-sign"></span></a></li>
                         <?php
-                        if($_SESSION['email']==""){
+                        if($_SESSION['Cemail']==""){
                             echo "<li><a href='login-customer.php'>Login<span class='glyphicon glyphicon-user'></span></a></li>";
                         }
                         else{
-                            echo "<li><a href='customer-logout.php'>Logout:". $_SESSION['email']."<span class='glyphicon glyphicon-user'></span></a></li>";
+                            echo "<li><a href='customer-logout.php'>Logout:". $_SESSION['Cemail']."<span class='glyphicon glyphicon-user'></span></a></li>";
                         }
                         ?>
                    </ul>
