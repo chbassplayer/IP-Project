@@ -47,7 +47,7 @@
                 <li><a href="ManageStore.php">Store</a></li>
                 <li><a href="ManageEmployees.php">Employees</a></li>
                 <li><a href="ManageCustomers.php">Customers</a></li>
-                <li><a href="CustomerView.php">Store Front</a></li>
+                <li><a href="customerHomeForEdits.php">Store Front</a></li>
 		    </ul>
             </div>
         </div>
