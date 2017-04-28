@@ -5,10 +5,11 @@
     include_once('config.php');
     include_once('dbutils.php');
     session_start();
-    //echo $_SESSION['startedOrder'];
+    $Search=$_GET['search'];
+    echo $_SESSION['startedOrder'];
     $_SESSION['StoreID']=1;
     $storeID=$_SESSION['StoreID'];
-    echo $_SESSION['startedOrder'];
+    //echo $_SESSION['startedOrder'];
     $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
     //get Date
     $queryDate="SELECT CURDATE() as TD;";
@@ -23,7 +24,7 @@
         $isComplete = true;
         $errorMessage = "";
         $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
-        
+        //this happens if the order has nothing in it.
         if ($_SESSION['startedOrder']==null){
             $queryStart="INSERT into orders (storeID,orderDate,orderStatus)Values(1,$TodayDate,6);";//starts an order
             $resultStart=queryDB($queryStart,$db);
@@ -37,13 +38,43 @@
             $resultDoOrder=queryDB($queryDoOrder,$db);
         }
         else{
+            $db = connectDB($DBHost, $DBUser, $DBPasswd, $DBName);
+            //this is is the order has already been started
+            echo "order started";
+            
+            //first we need to check if the items are unique
             $order=$_SESSION['startedOrder'];
-            $query="INSERT into itemsInOrder (itemID,orderID,quantityInOrder)Values($ProductID,$order,$quantity);";
-            $result=queryDB($query,$db);
+            $queryCheck="SELECT * from itemsInOrder where orderID=$order and itemID=$ProductID;";
+            $queryResult=queryDB($queryCheck,$db);
+            if (nTuples($queryResult) == 0) {
+                echo "no";
+                echo "next";
+                echo "ok";
+                $queryA="INSERT into itemsInOrder (itemID,orderID,quantityInOrder)Values($ProductID,$order,$quantity);";
+                $resultA=queryDB($queryA,$db);
+            }
+            
+        while($row=nextTuple($queryResult)){
+            echo "not empty";
+            //echo mysql_error ([ resource $link_identifier = NULL ] );
+            $checkQ=$row['quantityInOrder'];
+            $intCheckQ=intval($checkQ);
+            $intQuant=intval($quantity);
+            echo $intCheckQ. " ". $intQuant;
+                //echo "$checkQ";
+            //echo "$intQuant";
+            $newQuantity=($intCheckQ)+($quantity);
+            echo $newQuantity. "wasit";
+            $queryB="UPDATE itemsInOrder set quantityInOrder=$newQuantity where orderID=$order and itemID=$ProductID;";
+            $resultB=queryDB($queryB,$db);
+            
+            echo "done";
+        }
+
         }
         header('Location: ' . $_SERVER['HTTP_REFERER']);
     
-
+        
     }
     ?>
     
